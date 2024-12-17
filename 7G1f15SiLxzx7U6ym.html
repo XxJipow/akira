@@ -1,0 +1,172 @@
+<html><head><base href="https://example.com/">
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+}
+
+.glitch-text {
+    font-size: 8vw;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    position: relative;
+    letter-spacing: 0.3em;
+}
+
+.soon {
+    font-size: 2vw;
+    color: #ff0000;
+    opacity: 0;
+    text-align: center;
+    margin-top: 20px;
+    letter-spacing: 0.5em;
+    animation: fadeInOut 4s infinite;
+}
+
+.scanline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        transparent 50%,
+        rgba(255, 0, 0, 0.1) 51%,
+        transparent 51%
+    );
+    background-size: 100% 4px;
+    animation: scan 4s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes scan {
+    0% {
+        background-position: 0 -100vh;
+    }
+    100% {
+        background-position: 0 100vh;
+    }
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: 'AKIRA';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    color: #0ff;
+    animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+    opacity: 0.5;
+}
+
+.glitch-text::after {
+    color: #f0f;
+    animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) reverse both infinite;
+    opacity: 0.5;
+}
+
+.crt-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle,
+        transparent 50%,
+        rgba(0, 0, 0, 0.7) 150%
+    );
+    pointer-events: none;
+}
+</style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div class="crt-effect"></div>
+    <div class="vignette"></div>
+    
+    <div class="container">
+        <div class="glitch-text">AKIRA</div>
+        <div class="soon">SOON...</div>
+    </div>
+
+    <script>
+    document.addEventListener('mousemove', (e) => {
+        const glitchText = document.querySelector('.glitch-text');
+        const x = e.clientX / window.innerWidth - 0.5;
+        const y = e.clientY / window.innerHeight - 0.5;
+        
+        glitchText.style.transform = `
+            perspective(1000px)
+            rotateY(${x * 10}deg)
+            rotateX(${-y * 10}deg)
+        `;
+    });
+    </script>
+</body>
+</html>
